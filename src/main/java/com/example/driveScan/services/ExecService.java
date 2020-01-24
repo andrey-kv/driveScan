@@ -16,14 +16,19 @@ public class ExecService {
     @Autowired
     private FileEntryRepository fileEntryRepository;
 
+    @Autowired
+    private DriveScanService driveScanService;
+
     @EventListener(ApplicationReadyEvent.class)
     private void exec() {
         log.info("============ Execution ============");
 
-        FileEntry entry = FileEntry.builder()
-                .fullName("C:/Work/OAL/Documents/OAL process.md")
-                .build();
+        //FileEntry entry = FileEntry.builder()
+         //       .fullName("C:/Work/OAL/Documents/OAL process.md")
+           //     .build();
 
-        fileEntryRepository.save(entry);
+        driveScanService.scan("C:/Work/OAL/Documents");
+
+        // fileEntryRepository.save(entry);
     }
 }
