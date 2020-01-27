@@ -3,21 +3,20 @@ package com.example.driveScan.data;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigInteger;
 
 @Entity
-@Data
 @Builder
+@Data
+@Table(name="FILES", indexes={ @Index(name = "FULL_PATH", columnList = "fullName")})
 public class FileEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(length = 511)
     private String fullName;
 
     private String justName;
