@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 
 @Entity
 @Builder
@@ -23,7 +22,8 @@ public class FileEntry {
 
     private String justExt;
 
-    private BigInteger size;
+    private long size;
 
+    @Column(length = 127)
     private String hash;
 }

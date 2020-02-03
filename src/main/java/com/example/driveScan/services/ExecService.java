@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +20,9 @@ public class ExecService {
     @Autowired
     private DriveScanService driveScanService;
 
+    @Autowired
+    private Environment environment;
+
     @EventListener(ApplicationReadyEvent.class)
     private void exec() {
         log.info("============ Execution ============");
@@ -27,7 +31,10 @@ public class ExecService {
          //       .fullName("C:/Work/OAL/Documents/OAL process.md")
            //     .build();
 
-        driveScanService.scan("C:/Work/OAL/Documents");
+        String startFolder = this.environment.getProperty("start.folder");
+        log.info("Start folder = " + startFolder);
+        log.info("===================================");
+        driveScanService.scan(startFolder);
 
         // fileEntryRepository.save(entry);
     }

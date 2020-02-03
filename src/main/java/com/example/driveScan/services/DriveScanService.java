@@ -38,7 +38,7 @@ public class DriveScanService {
         FileEntry entry = FileEntry.builder()
              .fullName(f.getAbsolutePath())
              .justName(f.getName())
-             .size(BigInteger.valueOf(f.length()))
+             .size(f.length())
              .build();
         fileEntryRepository.save(entry);
     }
