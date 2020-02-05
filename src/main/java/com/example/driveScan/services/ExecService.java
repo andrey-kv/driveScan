@@ -32,9 +32,7 @@ public class ExecService {
            //     .build();
 
         String startFolder = this.environment.getProperty("start.folder");
-        log.info("Start folder = " + startFolder);
-        log.info("===================================");
-        driveScanService.scan(startFolder);
+        driveScanService.scanAll(startFolder);
 
         // fileEntryRepository.save(entry);
     }
