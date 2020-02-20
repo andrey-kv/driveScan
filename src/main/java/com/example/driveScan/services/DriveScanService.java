@@ -30,6 +30,7 @@ public class DriveScanService {
         log.info("===================================");
 
         scan(startFolder);
+        log.info("===================================");
         showResult();
     }
 
@@ -52,7 +53,7 @@ public class DriveScanService {
     }
 
     private void readFile(File f) {
-        if (!f.getPath().endsWith(".log")) {
+        if (!f.getPath().endsWith(".txt")) {
             return;
         }
 
@@ -64,13 +65,28 @@ public class DriveScanService {
 
             sc = new Scanner(fileInputStream, "UTF-8");
             precondition = false;
+            String prevLine1 = "";
+            String prevLine2 = "";
+            String prevLine3 = "";
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                searchSetOfStrings(line);
+                // searchSetOfStrings(line);
                 // searchWithPrecondition(line);
+                searchWithPostcondition(line, prevLine1, prevLine2, prevLine3);
+                prevLine3 = prevLine2;
+                prevLine2 = prevLine1;
+                prevLine1 = line;
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void searchWithPostcondition(String line, String prevLine1, String prevLine2, String prevLine3) {
+        if (line.contains("Failed Login by avios username")) {
+            if (!searchSetOfStrings(prevLine1, prevLine2, prevLine3)) {
+                // log.info(prevLine1);
+            }
         }
     }
 
@@ -90,12 +106,30 @@ public class DriveScanService {
         precondition = false;
     }
 
-    private void searchSetOfStrings(String line) {
+    private boolean searchSetOfStrings(String line1, String line2, String line3) {
+        boolean found = false;
         for (String s : searchStr.keySet()) {
-            if (line.contains(s)) {
+            if (line1.contains(s)) {
                 addOccurence(s);
+                found = true;
+                break;
+            } else if (line2.contains(s)) {
+                addOccurence(s);
+                found = true;
+                break;
+            } else if (line3.contains(s)) {
+                addOccurence(s);
+                found = true;
+                break;
             }
         }
+        if (!found) {
+            log.info(line1);
+            log.info(line2);
+            log.info(line3);
+            log.info("+++++++++++++++++++++++++++++++++++++++++");
+        }
+        return found;
     }
 
     private void addOccurence(String s) {
