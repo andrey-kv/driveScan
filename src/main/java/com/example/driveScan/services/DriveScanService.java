@@ -2,6 +2,7 @@ package com.example.driveScan.services;
 
 import com.example.driveScan.data.FileEntry;
 import com.example.driveScan.repositories.FileEntryRepository;
+import com.example.driveScan.searchers.Searcher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +22,9 @@ public class DriveScanService {
     private FileEntryRepository fileEntryRepository;
 
     @Autowired
+    private Searcher searcher;
+
+    @Autowired
     @Qualifier("SearchStr")
     private Map<String, Integer> searchStr;
     private boolean precondition;
@@ -29,6 +33,7 @@ public class DriveScanService {
         log.info("Start folder = " + startFolder);
         log.info("===================================");
 
+        searcher.scan(startFolder);
         scan(startFolder);
         log.info("===================================");
         showResult();
