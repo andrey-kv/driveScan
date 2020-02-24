@@ -31,12 +31,13 @@ public class DriveScanService {
 
     public void scanAll(String startFolder) {
         log.info("Start folder = " + startFolder);
-        log.info("===================================");
+        log.info("= Scan ======================================");
 
         searcher.scan(startFolder);
-        scan(startFolder);
-        log.info("===================================");
-        showResult();
+        // scan(startFolder);
+        log.info("= Display ===================================");
+        // showResult();
+        searcher.display();
     }
 
     public void scan(String folder) {
