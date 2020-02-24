@@ -2,9 +2,11 @@ package com.example.driveScan.data;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.context.annotation.Profile;
 
 import javax.persistence.*;
 
+@Profile("scanfolders")
 @Entity
 @Builder
 @Data

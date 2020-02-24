@@ -3,6 +3,7 @@ package com.example.driveScan.searchers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,12 @@ public class SearchInFiles implements Searcher {
     @Autowired
     @Qualifier("SearchStr")
     private Map<String, Integer> searchStr;
+
+    @Value("${trigger.string}")
+    private String triggerString;
+
+    @Value("${filename.endwith}")
+    private String filenameEnd;
 
     @Override
     public void scan(String startFolder) {
@@ -43,7 +50,7 @@ public class SearchInFiles implements Searcher {
     }
 
     private void readFile(File f) {
-        if (!f.getPath().endsWith(".txt")) {
+        if (!f.getPath().endsWith(filenameEnd)) {
             return;
         }
 
@@ -60,7 +67,7 @@ public class SearchInFiles implements Searcher {
             String prevLine3 = "";
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                searchWithPostcondition(line, prevLine1, prevLine2, prevLine3);
+                searchWithPostCondition(line, prevLine1, prevLine2, prevLine3);
                 prevLine3 = prevLine2;
                 prevLine2 = prevLine1;
                 prevLine1 = line;
@@ -70,8 +77,8 @@ public class SearchInFiles implements Searcher {
         }
     }
 
-    private void searchWithPostcondition(String line, String prevLine1, String prevLine2, String prevLine3) {
-        if (line.contains("Failed Login by avios username")) {
+    private void searchWithPostCondition(String line, String prevLine1, String prevLine2, String prevLine3) {
+        if (line.contains(triggerString)) {
             if (!searchSetOfStrings(prevLine1, prevLine2, prevLine3)) {
                 displayIfNotFound(prevLine1, prevLine2, prevLine3);
             }
