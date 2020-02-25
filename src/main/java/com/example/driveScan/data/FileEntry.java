@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Profile;
 
 import javax.persistence.*;
 
-@Profile("scanfolders")
 @Entity
 @Builder
 @Data

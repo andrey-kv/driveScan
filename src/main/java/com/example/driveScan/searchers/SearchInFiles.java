@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 @Component
-@Profile("default")
 @Slf4j
 public class SearchInFiles implements Searcher {
 
@@ -117,5 +116,10 @@ public class SearchInFiles implements Searcher {
             total += cnt;
         }
         log.info("*Total = " + total + "*");
+    }
+
+    @Override
+    public String type() {
+        return "SearchInFiles";
     }
 }

@@ -21,9 +21,11 @@ import java.util.Scanner;
 public class DriveScanService {
 
     @Autowired
+    @Qualifier("searcherBean")
     private Searcher searcher;
 
     public void scanAll(String startFolder) {
+        log.info(searcher.type());
         log.info("Start folder = " + startFolder);
         log.info("= Scan ======================================");
         searcher.scan(startFolder);

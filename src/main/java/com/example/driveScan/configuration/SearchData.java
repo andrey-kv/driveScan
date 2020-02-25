@@ -1,6 +1,9 @@
 package com.example.driveScan.configuration;
 
+import com.example.driveScan.searchers.Searcher;
+import com.example.driveScan.searchers.SearcherFactory;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
-@Profile("default")
 public class SearchData {
 
     @Value("${key.strings}")
     private List<String> keyStrings;
+
+    @Autowired
+    private SearcherFactory searcherFactory;
 
     @Bean
     @Qualifier("SearchStr")
@@ -26,5 +31,11 @@ public class SearchData {
             searchStr.put(key,0);
         }
         return searchStr;
+    }
+
+    @Bean
+    @Qualifier("searcherBean")
+    public Searcher getSearcher() throws Exception {
+        return searcherFactory.getObject();
     }
 }
