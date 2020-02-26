@@ -14,28 +14,20 @@ import java.io.File;
 @Component
 @Slf4j
 @Qualifier("ScanFolders")
-public class ScanFolders implements Searcher {
+public class ScanFolders extends SearcherAbstract implements Searcher {
 
     @Autowired
     private FileEntryRepository fileEntryRepository;
 
     @Override
-    public void scan(String startFolder) {
-        File item = new File(startFolder);
-        File[] files = item.listFiles();
-        for (File f : files) {
-            checkIfFolder(f);
-        }
-    }
-
-    private void checkIfFolder(File f) {
-        if (f.isDirectory()) {
-            log.info("Reading folder: " + f.getAbsolutePath());
-            scan(f.getAbsolutePath());
-        } else {
-            log.info(f.getAbsolutePath());
-            addFileToDatabase(f);
-        }
+    protected void searchAction(File f) {
+        FileEntry entry = FileEntry.builder()
+                .fullName(f.getAbsolutePath())
+                .justName(f.getName())
+                .size(f.length())
+                .build();
+        fileEntryRepository.save(entry);
+        log.info(f.getAbsolutePath());
     }
 
     @Override
@@ -46,15 +38,6 @@ public class ScanFolders implements Searcher {
     @Override
     public String type() {
         return "ScanFolders";
-    }
-
-    private void addFileToDatabase(File f) {
-        FileEntry entry = FileEntry.builder()
-                .fullName(f.getAbsolutePath())
-                .justName(f.getName())
-                .size(f.length())
-                .build();
-        fileEntryRepository.save(entry);
     }
 
 }

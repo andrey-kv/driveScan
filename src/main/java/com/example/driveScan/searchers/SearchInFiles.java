@@ -17,9 +17,7 @@ import java.util.Scanner;
 @Component
 @Slf4j
 @Qualifier("SearchInFiles")
-public class SearchInFiles implements Searcher {
-
-    private boolean precondition;
+public class SearchInFiles extends SearcherAbstract implements Searcher {
 
     @Autowired
     @Qualifier("SearchStr")
@@ -32,25 +30,7 @@ public class SearchInFiles implements Searcher {
     private String filenameEnd;
 
     @Override
-    public void scan(String startFolder) {
-        log.info("SearchInFiles: " + startFolder);
-        File item = new File(startFolder);
-        File[] files = item.listFiles();
-        for (File f : files) {
-            scanNext(f);
-        }
-    }
-
-    private void scanNext(File f) {
-        if (f.isDirectory()) {
-            log.info("Reading folder: " + f.getAbsolutePath());
-            scan(f.getAbsolutePath());
-        } else {
-            readFile(f);
-        }
-    }
-
-    private void readFile(File f) {
+    protected void searchAction(File f) {
         if (!f.getPath().endsWith(filenameEnd)) {
             return;
         }
@@ -62,7 +42,6 @@ public class SearchInFiles implements Searcher {
         try (FileInputStream fileInputStream = new FileInputStream(f)) {
 
             sc = new Scanner(fileInputStream, "UTF-8");
-            precondition = false;
             String prevLine1 = "";
             String prevLine2 = "";
             String prevLine3 = "";
