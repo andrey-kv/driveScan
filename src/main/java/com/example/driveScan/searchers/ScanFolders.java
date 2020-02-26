@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -22,12 +21,26 @@ public class ScanFolders implements Searcher {
 
     @Override
     public void scan(String startFolder) {
+        File item = new File(startFolder);
+        File[] files = item.listFiles();
+        for (File f : files) {
+            checkIfFolder(f);
+        }
+    }
 
+    private void checkIfFolder(File f) {
+        if (f.isDirectory()) {
+            log.info("Reading folder: " + f.getAbsolutePath());
+            scan(f.getAbsolutePath());
+        } else {
+            log.info(f.getAbsolutePath());
+            addFileToDatabase(f);
+        }
     }
 
     @Override
     public void display() {
-
+        log.info("Scan completed ============================");
     }
 
     @Override
